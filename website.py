@@ -30,18 +30,20 @@ class SalaryForm(Form):
     to_country = SelectField(u'Destination Country', coerce=unicode)
 
 
-@app.route("/")
+@app.route('/', methods=['GET', 'POST'])
 def index():
     form = SalaryForm()
+    form.from_country.choices = ((country.country_code, country.country_name) for country in Country.query.all())
+    form.to_country.choices = ((country.country_code, country.country_name) for country in Country.query.all())
     currency_value = None
     if form.validate_on_submit():
-        from_country = Country.query.filter(country_code=form.from_country.data).first()
-        to_country = Country.query.filter(country_code=form.to_country.data).first()
+        from_country = Country.query.filter_by(country_code=form.from_country.data).first()
+        to_country = Country.query.filter_by(country_code=form.to_country.data).first()
         if from_country or to_country is not None:
-            currency_value = (form.salary.data / from_country.ppp) * to_country.ppp
-    return render_template('index', form, currency_value)
+            currency_value = (float(form.salary.data) / float(from_country.ppp)) * to_country.ppp
+    return render_template('index.html', form=form, currency_value=currency_value)
 
 
 if __name__ == '__main__':
     db.create_all()
-    app.run()
+    app.run(debug=True)

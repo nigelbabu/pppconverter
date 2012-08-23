@@ -1,0 +1,12 @@
+{% from 'forms.html' import renderform %}
+<html>
+  <head>
+    <title>Salary Converter</title>
+  </head>
+  <body>
+  {{ renderform(form) }}
+  {% if currency_value %}
+  {{ currency_value }}
+  {% endif %}
+  </body>
+</html>
