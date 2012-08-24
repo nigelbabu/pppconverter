@@ -3,7 +3,6 @@ import csv
 from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.wtf import Form, TextField, DecimalField, SelectField, Required
-from baseframe import baseframe, baseframe_js, baseframe_css
 
 
 # Create an app and configure it
