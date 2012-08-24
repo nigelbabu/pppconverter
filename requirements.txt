@@ -3,3 +3,4 @@ Flask-Wtf
 Flask-Sqlalchemy
 lxml
 http://github.com/hasgeek/baseframe/zipball/master
+gunicorn
