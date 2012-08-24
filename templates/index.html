@@ -1,12 +1,36 @@
-{% from 'forms.html' import renderform %}
-<html>
-  <head>
-    <title>Salary Converter</title>
-  </head>
-  <body>
-  {{ renderform(form) }}
-  {% if currency_value %}
-  {{ currency_value }}
-  {% endif %}
-  </body>
-</html>
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row">
+  <div class="twelve columns centered">
+    <h2>Welcome to the Equivalent Income Calculator</h2>
+    <p>How much is your current salary worth in Australia? If you were moving, how much should you earn to match your current income? This calculator will help!</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="six columns centered">
+    <form method="POST" class="custom">
+      {{ form.csrf_token }}
+      {{ form.from_country.label }} {{ form.from_country }}
+      {{ form.salary.label }} {{ form.salary(placeholder="For Example, 100000") }}
+      {{ form.to_country.label }} {{ form.to_country }}
+      <input type="submit" class="medium button" value="Calculate" />
+    </form>
+  </div>
+</div>
+{% if currency_value %}
+<br />
+  <div class="row">
+    <div class="six columns centered">
+      <div class="panel callout radius">
+        You should get {{ currency_value }} in {{ tocountry.country_name }}'s local currency
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+{% block footerscripts %}
+<script type="text/javascript">
+  $(document).foundationCustomForms();
+</script>
+{% endblock %}
