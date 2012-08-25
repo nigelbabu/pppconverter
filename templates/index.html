@@ -9,7 +9,7 @@
 
 <div class="row">
   <div class="six columns centered">
-    <form method="POST" class="custom">
+    <form method="POST">
       {{ form.csrf_token }}
       {{ form.from_country.label }} {{ form.from_country }}
       {{ form.salary.label }} {{ form.salary(placeholder="For Example, 100000") }}
@@ -30,7 +30,8 @@
 {% endif %}
 {% endblock %}
 {% block footerscripts %}
+<script type="text/javascript" src="/static/js/chosen.jquery.min.js"></script>
 <script type="text/javascript">
-  $(document).foundationCustomForms();
+</script>
 </script>
 {% endblock %}
