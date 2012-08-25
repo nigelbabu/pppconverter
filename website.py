@@ -22,7 +22,7 @@ class Country(db.Model):
     ppp = db.Column(db.Numeric(2))
 
     def __repr__(self):
-        return '<Country %s>' % self.username
+        return '<Country %s>' % self.country_name
 
 
 # Form
