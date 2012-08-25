@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-import csv
 from decimal import Decimal
 from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.wtf import Form, TextField, DecimalField, SelectField, Required
+from flask.ext.wtf import Form, DecimalField, SelectField, Required
 
 
 # Create an app and configure it
@@ -16,35 +15,49 @@ db = SQLAlchemy(app)
 # Model
 class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    country_code = db.Column(db.String(3), unique=True)
-    country_name = db.Column(db.String(80), unique=True)
+    code3 = db.Column(db.String(3), unique=True)
+    code2 = db.Column(db.String(3), unique=True)
+    name = db.Column(db.String(80), unique=True)
     year = db.Column(db.Integer())
     ppp = db.Column(db.Numeric(2))
 
     def __repr__(self):
-        return '<Country %s>' % self.country_name
+        return '<Country %s>' % self.name
 
 
 # Form
 class SalaryForm(Form):
-    from_country = SelectField(u'Which origin country do you want to compare from?', coerce=int)
-    salary = DecimalField(u"Salary in origin country's local currency", validators=[Required()])
-    to_country = SelectField(u'Which country do you want to compare with?', coerce=int)
+    from_country = SelectField(u'Which origin country do you want to compare '
+                               'from?', coerce=int)
+    salary = DecimalField(u"Salary in origin country's local currency",
+                          validators=[Required()])
+    to_country = SelectField(u'Which country do you want to compare with?',
+                             coerce=int)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = SalaryForm()
-    currency_value=None
-    tocountry=None
-    form.from_country.choices = [(country.id, country.country_name) for country in Country.query.order_by('country_name').all()]
-    form.to_country.choices = [(country.id, country.country_name) for country in Country.query.order_by('country_name').all()]
+    currency_value = None
+    tocountry = None
+    form.from_country.choices = [(country.id, country.name) for country in
+                                 Country.query.order_by('name').all()]
+    form.to_country.choices = [(country.id, country.name) for country in
+                               Country.query.order_by('name').all()]
     if form.validate_on_submit():
         fromcountry = Country.query.get(form.from_country.data)
         tocountry = Country.query.get(form.to_country.data)
         if fromcountry or tocountry is not None:
-            currency_value = moneyfmt((form.salary.data / fromcountry.ppp) * tocountry.ppp)
-    return render_template('index.html', form=form, currency_value=currency_value, home=True, tocountry=tocountry, apikey=app.config['CLOUDMADE_API_KEY'])
+            currency_value = moneyfmt((form.salary.data / fromcountry.ppp)
+                                      * tocountry.ppp)
+    d = {
+        'form': form,
+        'currency_value': currency_value,
+        'home': True,
+        'tocountry': tocountry,
+        'apikey': app.config['CLOUDMADE_API_KEY'],
+    }
+    return render_template('index.html', **d)
 
 
 @app.route('/about')
