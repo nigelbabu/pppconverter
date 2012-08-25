@@ -44,7 +44,7 @@ def index():
         tocountry = Country.query.get(form.to_country.data)
         if fromcountry or tocountry is not None:
             currency_value = moneyfmt((form.salary.data / fromcountry.ppp) * tocountry.ppp)
-    return render_template('index.html', form=form, currency_value=currency_value, home=True, tocountry=tocountry)
+    return render_template('index.html', form=form, currency_value=currency_value, home=True, tocountry=tocountry, apikey=app.config['CLOUDMADE_API_KEY'])
 
 
 @app.route('/about')

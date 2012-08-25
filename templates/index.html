@@ -1,4 +1,10 @@
 {% extends 'layout.html' %}
+{% block headerscripts %}
+ <link rel="stylesheet" href="/static/js/leaflet/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="/static/js/leaflet/leaflet.ie.css" />
+ <![endif]-->
+{% endblock %}
 {% block content %}
 <div class="row">
   <div class="twelve columns centered">
@@ -27,13 +33,13 @@
       </div>
     </div>
   </div>
+
+{% endif %}
   <div class="row">
     <div class="six columns centered">
       <div id="map"></div>
     </div>
   </div>
-
-{% endif %}
 {% endblock %}
 {% block footerscripts %}
 <script type="text/javascript" src="/static/js/chosen.jquery.min.js"></script>
@@ -42,5 +48,13 @@
 </script>
 <script type="text/javascript" src="/static/js/leaflet/leaflet.js"></script>
 <script type="text/javascript" src="/static/js/countries.js"></script>
-<script type="text/javascript" src="/static/js/map.js"></script>
+<script type="text/javascript">
+var map = L.map('map').setView([51.505, -0.09], 13);
+L.tileLayer('http://{s}.tile.cloudmade.com/{{ apikey }}/997/256/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+            maxZoom: 18
+}).addTo(map);
+var marker = L.marker([51.5, -0.09]).addTo(map);
+
+</script>
 {% endblock %}
