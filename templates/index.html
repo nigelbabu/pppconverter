@@ -12,7 +12,7 @@
 
 <div class="row">
   <div class="six columns centered">
-    <form method="POST">
+    <form method="POST" id="salaryform">
       {{ form.csrf_token }}
       {{ form.from_country.label }} {{ form.from_country }}
       {{ form.salary.label }} {{ form.salary(placeholder="For Example, 100000") }}

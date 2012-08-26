@@ -9,6 +9,7 @@
 */
 
 #map { height: 500px; }
+#salaryform input.button[type="submit"] { margin: 1em 0; }
 /* -----------------------------------------
    Shared Styles
 ----------------------------------------- */
