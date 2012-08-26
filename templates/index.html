@@ -26,11 +26,17 @@
   <div class="row">
     <div class="six columns centered">
       <div class="panel callout radius">
-        In {{ tocountry.country_name }}, you should get {{ currency_value }} in local currency.
+        In {{ tocountry.name }}, you should get {{ currency_value }} in local currency.
       </div>
     </div>
   </div>
+
 {% endif %}
+  <div class="row">
+    <div class="six columns centered">
+      <div id="map"></div>
+    </div>
+  </div>
 {% endblock %}
 {% block footerscripts %}
 <script type="text/javascript" src="/static/js/chosen/chosen.jquery.min.js"></script>
