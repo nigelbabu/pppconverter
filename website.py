@@ -63,7 +63,7 @@ def index():
 @app.route('/json')
 def jsondata():
     countries = Country.query.all()
-    countrieslist = [{'name': country.name, 'ppp': str(country.ppp), 'code2': country.code2, 'code3': country.code3} for country in countries]
+    countrieslist = [{'id': country.id, 'name': country.name, 'ppp': str(country.ppp), 'code2': country.code2, 'code3': country.code3} for country in countries]
     return jsonify({'countries': countrieslist})
 
 
