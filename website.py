@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from decimal import Decimal
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.wtf import Form, DecimalField, SelectField, Required
 
@@ -63,7 +63,8 @@ def index():
 @app.route('/json')
 def jsondata():
     countries = Country.query.all()
-    return jsonify({'countries': countries})
+    countrieslist = [{'name': country.name, 'ppp': str(country.ppp), 'code2': country.code2, 'code3': country.code3} for country in countries]
+    return jsonify({'countries': countrieslist})
 
 
 @app.route('/about')
