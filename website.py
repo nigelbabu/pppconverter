@@ -47,6 +47,12 @@ def index():
     return render_template('index.html', form=form, currency_value=currency_value, home=True, tocountry=tocountry)
 
 
+@app.route('/json')
+def jsondata():
+    countries = Country.query.all()
+    return jsonify({'countries': countries})
+
+
 @app.route('/about')
 def about():
     return render_template('about.html', about=True)
