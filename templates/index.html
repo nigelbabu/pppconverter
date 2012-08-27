@@ -14,6 +14,7 @@
       {{ form.csrf_token }}
       {{ form.from_country.label }} {{ form.from_country(id='from_country') }}
       {{ form.salary.label }} {{ form.salary(id='salary', placeholder="For Example, 100000") }}
+      <small id="error_salary" class="hidden">Please enter a salary</small>
       {{ form.to_country.label }} {{ form.to_country(id='to_country') }}
       <input type="submit" class="medium button" value="Calculate" />
     </form>
@@ -45,7 +46,11 @@
       var salary = $('#salary');
       if (salary.attr('value') === '') {
         salary.addClass('error');
+        $('#error_salary').removeClass('hidden');
+        $('#error_salary').addClass('error');
       } else {
+        $('#error_salary').removeClass('error');
+        $('#error_salary').addClass('hidden');
         salary.removeClass('error');
         salary = salary.attr('value');
         var from_country_data = [];
