@@ -2,7 +2,9 @@
 from decimal import Decimal
 from flask import Flask, render_template, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.wtf import Form, DecimalField, SelectField, Required
+from flask_wtf import Form
+from wtforms import DecimalField, SelectField
+from wtforms.validators import InputRequired
 
 
 # Create an app and configure it
@@ -30,7 +32,7 @@ class SalaryForm(Form):
     from_country = SelectField(u'Which origin country do you want to compare '
                                'from?', coerce=int)
     salary = DecimalField(u"Salary in origin country's local currency",
-                          validators=[Required()])
+                          validators=[InputRequired()])
     to_country = SelectField(u'Which country do you want to compare with?',
                              coerce=int)
 
