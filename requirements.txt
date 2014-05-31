@@ -1,5 +1,3 @@
 Flask
 Flask-Wtf
 Flask-Sqlalchemy
-lxml
-gunicorn
