@@ -18,8 +18,8 @@ def main():
                        row['Country Name'], 'code': row['Country Code']}
             new_csv.append(new_row)
     with open('parsed_data.csv', 'w') as csvfile:
-        dict_writer = csv.DictWriter(csvfile, ['year', 'value', 'country',
-                                     'code'])
+        dict_writer = csv.DictWriter(csvfile, ['country', 'code', 'year',
+                                     'value'])
         dict_writer.writerows(new_csv)
 
 

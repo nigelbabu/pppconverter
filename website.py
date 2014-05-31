@@ -18,7 +18,6 @@ db = SQLAlchemy(app)
 class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code3 = db.Column(db.String(3), unique=True)
-    code2 = db.Column(db.String(3), unique=True)
     name = db.Column(db.String(80), unique=True)
     year = db.Column(db.Integer())
     ppp = db.Column(db.Numeric(2))
@@ -57,7 +56,6 @@ def index():
         'currency_value': currency_value,
         'home': True,
         'tocountry': tocountry,
-        'apikey': app.config['CLOUDMADE_API_KEY'],
     }
     return render_template('index.html', **d)
 
@@ -65,7 +63,7 @@ def index():
 @app.route('/json')
 def jsondata():
     countries = Country.query.all()
-    countrieslist = [{'id': country.id, 'name': country.name, 'ppp': str(country.ppp), 'code2': country.code2, 'code3': country.code3} for country in countries]
+    countrieslist = [{'id': country.id, 'name': country.name, 'ppp': str(country.ppp), 'code3': country.code3} for country in countries]
     return jsonify({'countries': countrieslist})
 
 
