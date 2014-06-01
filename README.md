@@ -18,7 +18,7 @@ Bank.
 
 4. Import the CSV into the sqlite database.
 
-    ./importcsv.py
+    ./importcsv.py -f data.csv
 
 5. Run the site.
 
@@ -34,7 +34,11 @@ Bank.
 
 4. Replace data.csv file with the newly created parsed\_data.csv file.
 
-5. PROFITT!!
+5. Import the new CSV into the sqlite database.
+
+    ./importcsv.py -f data.csv
+
+6. PROFITT!!
 
 
 
