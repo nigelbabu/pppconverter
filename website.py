@@ -28,12 +28,10 @@ class Country(db.Model):
 
 # Form
 class SalaryForm(Form):
-    from_country = SelectField(u'Which origin country do you want to compare '
-                               'from?', coerce=int)
-    salary = DecimalField(u"Salary in origin country's local currency",
+    from_country = SelectField(u'Source country' , coerce=int)
+    salary = DecimalField(u"Amount in source country's local currency",
                           validators=[InputRequired()])
-    to_country = SelectField(u'Which country do you want to compare with?',
-                             coerce=int)
+    to_country = SelectField(u'Target country', coerce=int)
 
 
 @app.route('/', methods=['GET', 'POST'])
