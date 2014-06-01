@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import csv
 import codecs
+import argparse
 
-
-def main():
+def main(file_name = None):
     new_csv = []
     # The CSV file from world bank as a UTF-8 BOM necessating the following
     # code.
-    with codecs.open('new_data.csv', 'r', 'utf-8-sig') as csvfile:
+    with codecs.open(file_name, 'r', 'utf-8-sig') as csvfile:
         data_dict = csv.DictReader(csvfile)
         for row in data_dict:
             new_row = {}
@@ -39,5 +39,10 @@ def extract_values(data):
     return None, None
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Parse a new CSV from World'
+                                     'Bank')
+    parser.add_argument('-f', '--file', required=True, help='Path to the CSV '
+                        'file')
+    args = parser.parse_args()
+    main(args.file)
 

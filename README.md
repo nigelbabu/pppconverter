@@ -28,9 +28,9 @@ Bank.
 ### Updating the data
 1. Download the CSV data from the [world bank portal][wb] and unzip the file.
 
-2. Move the CSV file into the code folder with the name new\_data.csv.
-
 3. Run the parsecsv.py script to create a file called parsed\_data.csv.
+
+    ./parsecsv.py -f /path/to/file
 
 4. Replace data.csv file with the newly created parsed\_data.csv file.
 
