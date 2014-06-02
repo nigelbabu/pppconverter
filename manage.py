@@ -8,10 +8,11 @@ from website import Country, Config, db, app
 
 manager = Manager(app)
 
-@manager.option('-f', '--file', required=True, help='Path to the CSV file')
+@manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
 def importcsv(file_name):
     '''Import a CSV into the database'''
-    with open(file_name) as ppp_data:
+    with open(file_name) as f:
+        ppp_data = csv.reader(f)
         for line in ppp_data:
             country = Country(name=line[0], code3=line[1],
                               year=line[2], ppp=line[3])
@@ -19,7 +20,7 @@ def importcsv(file_name):
             db.session.commit()
 
 
-@manager.option('-f', '--file', required=True, help='Path to the CSV file')
+@manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
 def parsecsv(file_name = None):
     '''Parse a CSV file from the World Bank'''
 
@@ -77,6 +78,12 @@ def update_conversion_rate():
         db_entry = Config(key='gbp_rate', value=gbp_rate)
     db.session.add(db_entry)
     db.session.commit()
+
+
+@manager.command
+def db_init():
+    db.create_all()
+
 
 if __name__ == '__main__':
     manager.run()
