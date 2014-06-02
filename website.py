@@ -23,13 +23,16 @@ class Country(db.Model):
     ppp = db.Column(db.Numeric(2))
 
     def __repr__(self):
-        return '<Country %s>' % self.name
+        return '<Country {0}>'.format(self.name)
 
 
 class Config(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(80), unique=True)
     value = db.Column(db.String(80))
+
+    def __repr__(self):
+        return '<Config {0}: {1}>'.format(self.key, self.value)
 
 
 # Form

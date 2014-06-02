@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-from flask.ext.script import Manager
-from website import Country, db, app
-import csv
 import argparse
+import csv
+import json
+import requests
+from flask.ext.script import Manager
+from website import Country, Config, db, app
 
 manager = Manager(app)
 
@@ -53,6 +55,28 @@ def parsecsv(file_name = None):
                                      'value'])
         dict_writer.writerows(new_csv)
 
+
+@manager.command
+def update_conversion_rate():
+    '''Update the converstion rate from openexchangerate'''
+    params = {'app_id': app.config['OPEN_EXCHANGE']}
+    try:
+        r = requests.get('http://openexchangerates.org/api/latest.json',
+                         params=params)
+    except requests.exceptions.ConnectionError:
+        return "Couldn't connect to the server"
+    except requests.exceptions.HTTPError:
+        return "The server returned an error"
+    response_dict = r.json()
+    rates = response_dict.get('rates', {})
+    gbp_rate = rates.get('GBP')
+    db_entry = Config.query.filter_by(key='gbp_rate').first()
+    if db_entry:
+        db_entry.value = gbp_rate
+    else:
+        db_entry = Config(key='gbp_rate', value=gbp_rate)
+    db.session.add(db_entry)
+    db.session.commit()
 
 if __name__ == '__main__':
     manager.run()
