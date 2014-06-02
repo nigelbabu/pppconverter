@@ -1,3 +1,5 @@
 Flask
 Flask-Wtf
 Flask-Sqlalchemy
+Flask-Script
+requests
