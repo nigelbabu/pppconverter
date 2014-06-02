@@ -14,15 +14,15 @@ Bank.
 
 3. Create the sqlite database by running the website.py file.
 
-    ./website.py
+    ./manage.py runserver
 
 4. Import the CSV into the sqlite database.
 
-    ./importcsv.py -f data.csv
+    ./manage.py importcsv -f data.csv
 
 5. Run the site.
 
-    ./webiste.py
+    ./manage.py runserver
 
 
 ### Updating the data
@@ -30,13 +30,13 @@ Bank.
 
 3. Run the parsecsv.py script to create a file called parsed\_data.csv.
 
-    ./parsecsv.py -f /path/to/file
+    ./manage.py parsecsv -f /path/to/file
 
 4. Replace data.csv file with the newly created parsed\_data.csv file.
 
 5. Import the new CSV into the sqlite database.
 
-    ./importcsv.py -f data.csv
+    ./manage.py importcsv -f data.csv
 
 6. PROFITT!!
 
