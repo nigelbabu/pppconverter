@@ -26,6 +26,12 @@ class Country(db.Model):
         return '<Country %s>' % self.name
 
 
+class Config(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(80), unique=True)
+    value = db.Column(db.String(80))
+
+
 # Form
 class SalaryForm(Form):
     from_country = SelectField(u'Source country' , coerce=int)
@@ -128,7 +134,3 @@ def moneyfmt(value, places=2, curr='', sep=',', dp='.',
     build(curr)
     build(neg if sign else pos)
     return ''.join(reversed(result))
-
-if __name__ == '__main__':
-    db.create_all()
-    app.run(debug=True)
