@@ -58,11 +58,13 @@ def index():
         if fromcountry or tocountry is not None:
             currency_value = moneyfmt((form.salary.data / fromcountry.ppp)
                                       * tocountry.ppp)
+    conversion = Config.query.filter_by(key='gbp_rate').first()
     d = {
         'form': form,
         'currency_value': currency_value,
         'home': True,
         'tocountry': tocountry,
+        'conversion_rate': float(conversion.value) * 100,
     }
     return render_template('index.html', **d)
 
