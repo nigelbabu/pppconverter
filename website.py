@@ -37,10 +37,10 @@ class Config(db.Model):
 
 # Form
 class SalaryForm(Form):
-    from_country = SelectField(u'Source country' , coerce=int)
-    salary = DecimalField(u"Amount in source country's local currency",
+    from_country = SelectField('Source country' , coerce=int)
+    salary = DecimalField("Amount in source country's local currency",
                           validators=[InputRequired()])
-    to_country = SelectField(u'Target country', coerce=int)
+    to_country = SelectField('Target country', coerce=int)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -120,7 +120,7 @@ def moneyfmt(value, places=2, curr='', sep=',', dp='.',
     q = Decimal(10) ** -places      # 2 places --> '0.01'
     sign, digits, exp = value.quantize(q).as_tuple()
     result = []
-    digits = map(str, digits)
+    digits = list(map(str, digits))
     build, next = result.append, digits.pop
     if sign:
         build(trailneg)
