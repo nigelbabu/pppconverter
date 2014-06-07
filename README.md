@@ -1,6 +1,8 @@
 Calculate how much money is worth in a different country. Uses data from World
 Bank.
 
+Note: Works on python3.4 and above.
+
 ### Installation Instructions
 1. Clone the source code
 
@@ -8,9 +10,9 @@ Bank.
 
 2. Create a virtual environments and install the dependencies
 
-    virtualenv env
+    python -m venv env
     source env/bin/activate
-    pip install -r requirements.txt
+    env/local/bin/pip3 install -r requirements.txt
 
 3. Create the sqlite database by running the website.py file.
 
