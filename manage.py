@@ -18,7 +18,7 @@ def importcsv(file_name):
                               year=line[2], ppp=line[3])
             db.session.add(country)
             db.session.commit()
-    print "Imported CSV successfully"
+    print("Imported CSV successfully")
 
 
 @manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
@@ -56,7 +56,7 @@ def parsecsv(file_name = None):
         dict_writer = csv.DictWriter(csvfile, ['country', 'code', 'year',
                                      'value'])
         dict_writer.writerows(new_csv)
-    print "Parsed CSV successfully"
+    print("Parsed CSV successfully")
 
 
 @manager.command
@@ -80,7 +80,7 @@ def update_conversion_rate():
         db_entry = Config(key='gbp_rate', value=gbp_rate)
     db.session.add(db_entry)
     db.session.commit()
-    print "Updated conversion rate"
+    print("Updated conversion rate")
 
 
 @manager.command
