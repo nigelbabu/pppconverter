@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import csv
+import codecs
 import json
 import requests
 from flask.ext.script import Manager
