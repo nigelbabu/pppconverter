@@ -3,3 +3,4 @@ instance/local.py
 test.db
 .DS_STORE
 static/.webassets-cache
+env
