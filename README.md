@@ -6,25 +6,25 @@ Note: Works on python3.4 and above.
 ### Installation Instructions
 1. Clone the source code
 
-    https://github.com/nigelbabu/pppconverter.git
+        git clone https://github.com/nigelbabu/pppconverter.git
 
 2. Create a virtual environments and install the dependencies
 
-    python -m venv env
-    source env/bin/activate
-    env/local/bin/pip3 install -r requirements.txt
+        python -m venv env
+        source env/bin/activate
+        env/local/bin/pip3 install -r requirements.txt
 
 3. Create the sqlite database by running the website.py file.
 
-    ./manage.py runserver
+        ./manage.py runserver
 
 4. Import the CSV into the sqlite database.
 
-    ./manage.py importcsv -f data.csv
+        ./manage.py importcsv -f data.csv
 
 5. Run the site.
 
-    ./manage.py runserver
+        ./manage.py runserver
 
 
 ### Updating the data
@@ -32,13 +32,13 @@ Note: Works on python3.4 and above.
 
 3. Run the parsecsv.py script to create a file called parsed\_data.csv.
 
-    ./manage.py parsecsv -f /path/to/file
+        ./manage.py parsecsv -f /path/to/file
 
 4. Replace data.csv file with the newly created parsed\_data.csv file.
 
 5. Import the new CSV into the sqlite database.
 
-    ./manage.py importcsv -f data.csv
+        ./manage.py importcsv -f data.csv
 
 6. PROFITT!!
 
