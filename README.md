@@ -10,9 +10,9 @@ Note: Works on python3.4 and above.
 
 2. Create a virtual environments and install the dependencies
 
-        python -m venv env
+        virtualenv -p python3 env
         source env/bin/activate
-        env/local/bin/pip3 install -r requirements.txt
+        pip install -r requirements.txt
 
 3. Create the sqlite database by running the website.py file.
 
