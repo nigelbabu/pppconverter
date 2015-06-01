@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from decimal import Decimal
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_wtf import Form
 from wtforms import DecimalField, SelectField
@@ -77,18 +77,10 @@ def jsondata():
 
 
 @app.route('/about')
-def about():
-    return render_template('about.html', about=True)
-
-
 @app.route('/data')
-def data():
-    return render_template('data.html', data=True)
-
-
 @app.route('/contact')
-def contact():
-    return render_template('contact.html', contact=True)
+def archived_paths():
+    return redirect('/', code=301)
 
 
 def moneyfmt(value, places=2, curr='', sep=',', dp='.',
