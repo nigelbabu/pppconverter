@@ -1,8 +1,57 @@
-{% extends 'layout.html' %}
-{% block headerscripts %}
-  <link rel="stylesheet" href="/static/js/chosen/chosen.css" />
-{% endblock %}
-{% block content %}
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Equivalent Income Calculator!</title>
+    <link rel="stylesheet" href="/static/css/foundation.min.css">
+    <link rel="stylesheet" href="/static/css/app.css?v=1">
+    <link rel="stylesheet" href="/static/css/chosen.min.css" />
+    <script src="/static/js/vendor/modernizr.js"></script>
+    {% if config['GA_CODE'] %}
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '{{ config['GA_CODE'] }}']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    {% endif %}
+  </head>
+  <body>
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="#">My Site</a></h1>
+    </li>
+     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+    <ul class="right">
+      <li class="active"><a href="#">Right Button Active</a></li>
+      <li class="has-dropdown">
+        <a href="#">Right Button Dropdown</a>
+        <ul class="dropdown">
+          <li><a href="#">First link in dropdown</a></li>
+          <li class="active"><a href="#">Active link in dropdown</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- Left Nav Section -->
+    <ul class="left">
+      <li><a href="#">Left Nav Button</a></li>
+    </ul>
+  </section>
+</nav>
+
 <div class="row">
   <div class="twelve columns centered">
     <h2>Equivalent Income Calculator</h2>
@@ -56,41 +105,21 @@
   </div>
 </div>
 
-{% endblock %}
-{% block footerscripts %}
-<script type="text/javascript" src="/static/js/chosen/chosen.jquery.min.js"></script>
-<script type="text/javascript">
-  $('form select').chosen();
-  $('form').submit(function (event) {
-    $.getJSON('/json', function(data) {
-      var from_country = Number($('#from_country').attr('value'));
-      var to_country = Number($('#to_country').attr('value'));
-      var salary = $('#salary');
-      if (salary.attr('value') === '') {
-        salary.addClass('error');
-        $('#error_salary').removeClass('hidden');
-        $('#error_salary').addClass('error');
-      } else {
-        $('#error_salary').removeClass('error');
-        $('#error_salary').addClass('hidden');
-        salary.removeClass('error');
-        salary = salary.attr('value');
-        var from_country_data = [];
-        var to_country_data = [];
-        $.each(data['countries'], function(key, country) {
-          if(country['id'] === from_country) {
-            from_country_data = country;
-          } else if(country['id'] === to_country) {
-            to_country_data = country;
-          }
-        });
-        var equivalent_salary = (Number(salary) / from_country_data['ppp']) * to_country_data['ppp'];
-        console.log("In " + to_country_data['name'] + ", you should get " + equivalent_salary + " in local currency.");
-        $('#resultDiv').html("In " + to_country_data['name'] + ", you should get " + Math.round(equivalent_salary * 100)/100 + " in local currency.");
-        $('#displayResult').removeClass('hidden');
-      }
-    });
-    return false;
-  });
-</script>
-{% endblock %}
+  <div class="row">
+    <div class="twelve columns">
+      <hr />
+      <p>Created with &hearts; by <a href="http://nigelb.me/consulting.html">nigelb.me</a></p>
+    </div>
+  </div>
+
+  <!-- Included JS Files (Compressed) -->
+  <script src="/static/js/vendor/jquery.js"></script>
+  <script src="/static/js/foundation.min.js"></script>
+  <!-- <script type="text/javascript" src="/static/js/chosen.jquery.min.js"></script> -->
+  <script>
+    $(document).foundation();
+  </script>
+  <!-- Initialize JS Plugins -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
