@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Equivalent Income Calculator!</title>
-    <link rel="stylesheet" href="/static/css/foundation.min.css">
-    <link rel="stylesheet" href="/static/css/app.css?v=1">
-    <link rel="stylesheet" href="/static/css/chosen.min.css" />
-    <script src="/static/js/vendor/modernizr.js"></script>
+    <link rel="stylesheet" href="/static/bower_components/foundation/css/foundation.min.css">
+    <link rel="stylesheet" href="/static/bower_components/chosen/chosen.min.css" />
+    <link rel="stylesheet" href="/static/css/app.css" />
+    <script src="/static/bower_components/modernizr/modernizr.js"></script>
     {% if config['GA_CODE'] %}
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -23,103 +23,76 @@
     {% endif %}
   </head>
   <body>
-<nav class="top-bar" data-topbar role="navigation">
-  <ul class="title-area">
-    <li class="name">
-      <h1><a href="#">My Site</a></h1>
-    </li>
-     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-  </ul>
 
-  <section class="top-bar-section">
-    <!-- Right Nav Section -->
-    <ul class="right">
-      <li class="active"><a href="#">Right Button Active</a></li>
-      <li class="has-dropdown">
-        <a href="#">Right Button Dropdown</a>
-        <ul class="dropdown">
-          <li><a href="#">First link in dropdown</a></li>
-          <li class="active"><a href="#">Active link in dropdown</a></li>
-        </ul>
-      </li>
-    </ul>
-
-    <!-- Left Nav Section -->
-    <ul class="left">
-      <li><a href="#">Left Nav Button</a></li>
-    </ul>
-  </section>
-</nav>
-
-<div class="row">
-  <div class="twelve columns centered">
-    <h2>Equivalent Income Calculator</h2>
-    <p>Currency converters tell you that you can get &pound;{{ conversion_rate | round(2) }} for $100. But how much money would you need in London to buy the same things you'd buy in New York? This is where Purchasing Power Parity is useful.</p>
-    <blockquote>
-      <p>Purchasing Power Parity (PPP) is measured by finding the values (in USD) of a basket of consumer goods that are present in each country (such as orange juice, pencils, etc.). If that basket costs $100 in the US and $200 in England, than purchasing power parity exchange rate is 1:2.
-      <footer><a href="http://simple.wikipedia.org/wiki/Purchasing_power_parity">Simple English Wikipedia</a></footer>
-    </blockquote>
-<div class="row">
-  <div class="six columns centered">
-    <form method="POST" id="salaryform">
-      {{ form.csrf_token }}
-      {{ form.from_country.label }} {{ form.from_country(id='from_country') }}
-      {{ form.salary.label }} {{ form.salary(id='salary', placeholder="For Example, 100000") }}
-      <small id="error_salary" class="hidden">Please enter a salary</small>
-      {{ form.to_country.label }} {{ form.to_country(id='to_country') }}
-      <input type="submit" class="medium button" value="Calculate" />
-    </form>
-  </div>
-</div>
-<br />
-  <div class="row{% if not currency_value %} hidden{% endif %}" id="displayResult">
-    <div class="six columns centered">
-      <div class="panel callout radius" id="resultDiv">
-        In {{ tocountry.name }}, you should get {{ currency_value }} in local currency.
+    <div class="row">
+      <div class="large-12 columns">
+        <h2>Salary Converter</h2>
+        <p>Currency converters tell you that you can get &pound;{{ conversion_rate | round(2) }} for $100. But how much money would you need in London to buy the same things you'd buy in New York? This is where <a href="http://simple.wikipedia.org/wiki/Purchasing_power_parity">Purchasing Power Parity</a> is useful.</p>
       </div>
     </div>
-  </div>
+
+    <div class="row">
+      <div class="large-3 columns">&nbsp;</div>
+      <div class="large-6 columns">
+        <form method="POST" id="salaryform">
+          {{ form.csrf_token }}
+          {{ form.from_country.label }} {{ form.from_country(id='from_country') }}
+          {{ form.salary.label }} {{ form.salary(id='salary', placeholder="For Example, 100000") }}
+          <small id="error_salary" class="hidden">Please enter a salary</small>
+          {{ form.to_country.label }} {{ form.to_country(id='to_country') }}
+          <input type="submit" class="medium button" value="Calculate" />
+        </form>
+      </div>
+      <div class="large-3 columns">&nbsp;</div>
+    </div>
+    <br />
+    <div class="row{% if not currency_value %} hidden{% endif %}" id="displayResult">
+      <div class="large-3 columns">&nbsp;</div>
+      <div class="large-6 columns">
+        <div class="panel callout radius" id="resultDiv">
+          In {{ tocountry.name }}, you should get {{ currency_value }} in local currency.
+        </div>
+      </div>
+      <div class="large-3 columns">&nbsp;</div>
+    </div>
 
 <div class="row">
-  <div class="twelve columns centered">
-    <h2>About</h2>
-    <p>This application was built as a solution to <a href="http://wiki.okfn.org/Get_The_Data_Challenge#Cost_of_living_...">one of the challenges</a> in Get the Data Challenge. The code is open source and MIT licensed and can be found on <a href="http://github.com/nigelbabu/pppconverter">GitHub</a>.</p>
-  </div>
-</div>
-
-<div class="row">
-  <div class="twelve columns centered">
-    <h2>Contact</h2>
-    <p>For any questions or concerns with the data or this app, please contact
+  <div class="large-12 columns">
+    <h2 id="about">About</h2>
+    <p>This application was built as a solution to <a
+      href="http://wiki.okfn.org/Get_The_Data_Challenge#Cost_of_living_...">one
+      of the challenges</a> in Get the Data Challenge. The code is open source
+    and MIT licensed and can be found on <a
+      href="http://github.com/nigelbabu/pppconverter">GitHub</a>.</p>
+    <p>The data used by this application comes from <a
+      href="http://data.worldbank.org/indicator/PA.NUS.PRVT.PP/countries?display=default">The
+      World Bank</a>.  The data was then converted into a simplified table by
+    taking the latest available data for every country.  The source data used
+    by this application is on <a
+      href="http://github.com/nigelbabu/pppconverter/blob/master/data.csv">GitHub</a>
+    along with the code. For any questions or concerns with the data or this app, please contact
     me on <a href="http://twitter.com/nigelbabu">Twitter</a> or by email on
-    nigel at nigelb dot me. I'm available to <a href="http://nigelb.me/consulting.html">help</a> build Python-based applications and
-    manage your servers!</p>
-  </div>
-</div>
+    nigel at nigelb dot me.</p>
 
-<div class="row">
-  <div class="twelve columns centered">
-    <h2>Data</h2>
-    <p>The data used by this application comes from <a href="http://data.worldbank.org/indicator/PA.NUS.PRVT.PP/countries?display=default">The World Bank</a>.  The data was then converted into a simplified table by taking the latest available data for every country.  The source data used by this application is on <a href="http://github.com/nigelbabu/pppconverter/blob/master/data.csv">GitHub</a> along with the code.</p>
+    <p>I'm <a href="http://nigelb.me/consulting.html">available to help</a> build
+    Python-based applications and manage your servers!</p>
   </div>
 </div>
 
   <div class="row">
-    <div class="twelve columns">
+    <div class="large-12 columns">
       <hr />
       <p>Created with &hearts; by <a href="http://nigelb.me/consulting.html">nigelb.me</a></p>
     </div>
   </div>
 
   <!-- Included JS Files (Compressed) -->
-  <script src="/static/js/vendor/jquery.js"></script>
-  <script src="/static/js/foundation.min.js"></script>
-  <!-- <script type="text/javascript" src="/static/js/chosen.jquery.min.js"></script> -->
+  <script src="/static/bower_components/jquery/dist/jquery.js"></script>
+  <script src="/static/bower_components/foundation/js/foundation.js"></script>
+  <script type="text/javascript" src="/static/bower_components/chosen/chosen.jquery.min.js"></script>
   <script>
     $(document).foundation();
   </script>
-  <!-- Initialize JS Plugins -->
   <script src="/static/js/app.js"></script>
 </body>
 </html>
