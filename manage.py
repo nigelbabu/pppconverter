@@ -18,11 +18,8 @@ def importcountries(file_name):
             country = Country.query.filter_by(code3=line[3]).first()
             if country:
                 country.currency = line[14]
-                print country.name, line[14]
                 db.session.add(country)
                 db.session.commit()
-            else:
-                print "{0} not found".format(line[0])
     print("Imported CSV successfully")
 
 
