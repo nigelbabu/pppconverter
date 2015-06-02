@@ -10,6 +10,23 @@ from website import Country, Config, db, app
 manager = Manager(app)
 
 @manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
+def importcountries(file_name):
+    '''Import the countries CSV into the database'''
+    with open(file_name) as f:
+        country_data = csv.reader(f)
+        for line in country_data:
+            country = Country.query.filter_by(code3=line[3]).first()
+            if country:
+                country.currency = line[14]
+                print country.name, line[14]
+                db.session.add(country)
+                db.session.commit()
+            else:
+                print "{0} not found".format(line[0])
+    print("Imported CSV successfully")
+
+
+@manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
 def importcsv(file_name):
     '''Import a CSV into the database'''
     with open(file_name) as f:

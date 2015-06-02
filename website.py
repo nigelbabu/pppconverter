@@ -18,6 +18,7 @@ db = SQLAlchemy(app)
 class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code3 = db.Column(db.String(3), unique=True)
+    currency = db.Column(db.String(3))
     name = db.Column(db.String(80), unique=True)
     year = db.Column(db.Integer())
     ppp = db.Column(db.Numeric(2))
@@ -48,6 +49,7 @@ def index():
     form = SalaryForm()
     currency_value = None
     tocountry = None
+    fromcountry = None
     form.from_country.choices = [(country.id, country.name) for country in
                                  Country.query.order_by('name').all()]
     form.to_country.choices = [(country.id, country.name) for country in
@@ -62,17 +64,20 @@ def index():
     d = {
         'form': form,
         'currency_value': currency_value,
-        'home': True,
+        'fromcountry': None,
         'tocountry': tocountry,
         'conversion_rate': float(conversion.value) * 100,
     }
+    if fromcountry:
+        d['fromcountry'] = fromcountry
+        d['input_value'] = moneyfmt(form.salary.data)
     return render_template('index.html', **d)
 
 
 @app.route('/json')
 def jsondata():
     countries = Country.query.all()
-    countrieslist = [{'id': country.id, 'name': country.name, 'ppp': str(country.ppp), 'code3': country.code3} for country in countries]
+    countrieslist = [{'id': country.id, 'name': country.name, 'ppp': str(country.ppp), 'code3': country.code3, 'currency': country.currency} for country in countries]
     return jsonify({'countries': countrieslist})
 
 
