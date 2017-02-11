@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from decimal import Decimal
 from flask import Flask, render_template, jsonify, redirect
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import Form
 from wtforms import DecimalField, SelectField
 from wtforms.validators import InputRequired
@@ -38,7 +38,7 @@ class Config(db.Model):
 
 # Form
 class SalaryForm(Form):
-    from_country = SelectField('Source country' , coerce=int)
+    from_country = SelectField('Source country', coerce=int)
     salary = DecimalField("Amount in source country's local currency",
                           validators=[InputRequired()])
     to_country = SelectField('Target country', coerce=int)
@@ -58,8 +58,8 @@ def index():
         fromcountry = Country.query.get(form.from_country.data)
         tocountry = Country.query.get(form.to_country.data)
         if fromcountry or tocountry is not None:
-            currency_value = moneyfmt((form.salary.data / fromcountry.ppp)
-                                      * tocountry.ppp)
+            currency_value = moneyfmt((form.salary.data / fromcountry.ppp) *
+                                      tocountry.ppp)
     conversion = Config.query.filter_by(key='gbp_rate').first()
     d = {
         'form': form,
@@ -77,7 +77,16 @@ def index():
 @app.route('/json')
 def jsondata():
     countries = Country.query.all()
-    countrieslist = [{'id': country.id, 'name': country.name, 'ppp': str(country.ppp), 'code3': country.code3, 'currency': country.currency} for country in countries]
+    countrieslist = [
+            {
+                'id': country.id,
+                'name': country.name,
+                'ppp': str(country.ppp),
+                'code3': country.code3,
+                'currency': country.currency
+            }
+            for country in countries
+    ]
     return jsonify({'countries': countrieslist})
 
 
