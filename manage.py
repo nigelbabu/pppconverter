@@ -41,7 +41,7 @@ def parsecsv(file_name = None):
     '''Parse a CSV file from the World Bank'''
 
     def extract_values(data):
-        list_of_years = ['2015']
+        list_of_years = ['2016']
 
         for year in list_of_years:
             if data.get(year):
