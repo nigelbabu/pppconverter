@@ -2,7 +2,7 @@
 from decimal import Decimal
 from flask import Flask, render_template, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import DecimalField, SelectField
 from wtforms.validators import InputRequired
 
@@ -37,7 +37,7 @@ class Config(db.Model):
 
 
 # Form
-class SalaryForm(Form):
+class SalaryForm(FlaskForm):
     from_country = SelectField('Source country', coerce=int)
     salary = DecimalField("Amount in source country's local currency",
                           validators=[InputRequired()])

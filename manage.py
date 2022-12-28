@@ -1,15 +1,17 @@
 #!/usr/bin/env python
+import click
 import argparse
 import csv
 import codecs
 import json
 import requests
-from flask_script import Manager
+from flask.cli import AppGroup
 from website import Country, Config, db, app
 
-manager = Manager(app)
+user_cli = AppGroup('user')
 
-@manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
+@user_cli.command('importcountries')
+@click.option('-f', '--file_name', required=True, help='Path to the CSV file')
 def importcountries(file_name):
     '''Import the countries CSV into the database'''
     with open(file_name) as f:
@@ -23,7 +25,8 @@ def importcountries(file_name):
     print("Imported CSV successfully")
 
 
-@manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
+@user_cli.command('importcsv')
+@click.option('-f', '--file_name', required=True, help='Path to the CSV file')
 def importcsv(file_name):
     '''Import a CSV into the database'''
     with open(file_name) as f:
@@ -36,12 +39,13 @@ def importcsv(file_name):
     print("Imported CSV successfully")
 
 
-@manager.option('-f', '--file_name', required=True, help='Path to the CSV file')
+@user_cli.command('parsecsv')
+@click.option('-f', '--file_name', required=True, help='Path to the CSV file')
 def parsecsv(file_name = None):
     '''Parse a CSV file from the World Bank'''
 
     def extract_values(data):
-        list_of_years = ['2016']
+        list_of_years = ['2021']
 
         for year in list_of_years:
             if data.get(year):
@@ -68,7 +72,7 @@ def parsecsv(file_name = None):
     print("Parsed CSV successfully")
 
 
-@manager.command
+@user_cli.command('update_conversion_rate')
 def update_conversion_rate():
     '''Update the converstion rate from openexchangerate'''
     params = {'app_id': app.config['OPEN_EXCHANGE']}
@@ -92,10 +96,9 @@ def update_conversion_rate():
     print("Updated conversion rate")
 
 
-@manager.command
+@user_cli.command('db_init')
 def db_init():
     db.create_all()
 
 
-if __name__ == '__main__':
-    manager.run()
+app.cli.add_command(user_cli)
