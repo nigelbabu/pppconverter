@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salary Converter</title>
     <link rel="stylesheet" href="/static/css/app.css" />
-    {% if config['GA_CODE'] %}
+    {{ if ne .GoogleAnalytics "" }}
     <script type="text/javascript">
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '{{ config['GA_CODE'] }}']);
+      _gaq.push(['_setAccount', '{{ .GoogleAnalytics }}']);
       _gaq.push(['_trackPageview']);
 
       (function() {
@@ -17,7 +17,7 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
-    {% endif %}
+    {{ end }}
     <link rel="shortcut icon" href="/static/img/favicon.ico">
   </head>
   <body>
@@ -25,21 +25,41 @@
     <div class="container mx-auto prose p-4">
       <div class="columns-1">
         <h1 class="top-4 text-emerald-600">Salary Converter</h1>
-        <p>Currency converters tell you that you can get &pound;{{ conversion_rate | round(2) }} for $100. But how much money would you need in London to buy the same things you'd buy in New York? This is where <a href="http://simple.wikipedia.org/wiki/Purchasing_power_parity">Purchasing Power Parity</a> is useful.</p>
+        <p>Currency converters tell you that you can get &pound;{{ .ConversionRate }} for $100. But how much money would you need in London to buy the same things you'd buy in New York? This is where <a href="http://simple.wikipedia.org/wiki/Purchasing_power_parity">Purchasing Power Parity</a> is useful.</p>
 
         <form method="POST" id="salaryform">
-          {{ form.csrf_token }}
-          <p>{{ form.from_country.label }}</p>
-          <p>{{ form.from_country(id='from_country') }}</p>
-          <p>{{ form.salary.label }}</p>
-          <p>{{ form.salary(id='salary', placeholder="For Example, 100000") }}</p>
-          <p>{{ form.to_country.label }}</p>
-          <p>{{ form.to_country(id='to_country') }}</p>
+          <p><label for="from_country">Source Country</label></p>
+          <p>
+          {{ $FromCountry := .FormData.SourceCountry }}
+          <select id="from_country" name="from_country">
+            {{ range .Countries }}
+            <option value="{{.ID}}"{{ if eq $FromCountry .ID}} selected{{end}}>{{.Name}}</option>
+            {{ end }}
+            </select>
+          </p>
+          <p><label for="salary">Amount in source country's local currency</label></p>
+          <p><input id="salary" name="salary" type="number" placeholder="For Example, 100000" value="{{if ne .FormData.Salary 0}}{{.FormData.Salary}}{{end}}"></p>
+          <p><label for="to_country">Target Country</label></p>
+          <p>
+          {{ $ToCountry := .FormData.TargetCountry }}
+          <select id="to_country" name="to_country">
+            {{ range .Countries }}
+            <option value="{{.ID}}"{{ if eq $ToCountry .ID}} selected{{end}}>{{.Name}}</option>
+            {{ end }}
+            </select>
+          </p>
           <p><input type="submit" class="bg-emerald-500 rounded px-3 py-3" value="Calculate" /></p>
         </form>
-        <div class="rounded shadow bg-emerald-200 p-6{% if not currency_value %} hidden{% endif %}">
-          In {{ tocountry.name }}, {{ currency_value }} {{ tocountry.currency }} will allow you to buy the same things you'd buy with {{ input_value }} {{ fromcountry.currency }} in {{ fromcountry.name }}.
+        <div class="rounded shadow bg-emerald-200 p-6{{ if eq .Result.SourceAmount "" }} hidden{{ end }}">
+          In {{ .Result.TargetCountry }}, {{ .Result.TargetAmount }} {{
+            .Result.TargetCurrency }} will allow you to buy the same things
+            you'd buy with {{ .Result.SourceAmount }} {{ .Result.SourceCurrency
+            }} in {{ .Result.SourceCountry }}.
         </div>
+        <h2>Data</h2>
+        <p>The data is fetched automatically every week and updated. If a
+        specific country you care about is missing, this is because the latest
+        version of the data did not include that country.</p>
         <h2 id="about">About</h2>
         <p>This application was built as a solution to <a
           href="http://wiki.okfn.org/Get_The_Data_Challenge#Cost_of_living_...">one

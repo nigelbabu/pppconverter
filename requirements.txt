@@ -1,4 +1,0 @@
-Flask
-Flask-Wtf
-Flask-Sqlalchemy
-requests

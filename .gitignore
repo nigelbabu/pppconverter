@@ -1,8 +1,8 @@
-*.pyc
-instance/local.py
-test.db
-.DS_STORE
-static/.webassets-cache
-env
 node_modules
 *.swp
+upstream.csv*
+config.yaml
+pppconverter
+pppcli
+temp.db
+cli/cli
