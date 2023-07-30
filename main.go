@@ -18,6 +18,7 @@ import (
 var (
 	db            *gorm.DB
 	cached        cachedData
+	startTime     time.Time
 	cacheDuration = 1 * time.Hour
 )
 
@@ -137,7 +138,7 @@ func setupRouter() *gin.Engine {
 
 	// Ping test
 	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
+		c.String(http.StatusOK, fmt.Sprintf("pong: %s", time.Now().Sub(startTime).Round(time.Second)))
 	})
 
 	// Home Page
@@ -188,6 +189,7 @@ func main() {
 		log.Fatal(err)
 	}
 	r := setupRouter()
+	startTime = time.Now()
 	// Listen and Server in 0.0.0.0:8080
 	r.Run(":8080")
 }
