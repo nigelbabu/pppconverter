@@ -70,8 +70,8 @@ func FetchConversionRate() (string, error) {
 	return cfg.Value, nil
 }
 
+// Deal with the home page.
 func homePage(c *gin.Context) {
-	// Fetch country data for all requests
 	countries, err := FetchCountries()
 	if err != nil {
 		log.Println("Failed to read DB: ", err)
@@ -118,6 +118,12 @@ func homePage(c *gin.Context) {
 	})
 }
 
+// Redirect old pages to home page.
+func archivedRedirect(c *gin.Context) {
+	c.Redirect(http.StatusMovedPermanently, "/")
+
+}
+
 func setupRouter() *gin.Engine {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
@@ -137,6 +143,11 @@ func setupRouter() *gin.Engine {
 	// Home Page
 	r.GET("/", homePage)
 	r.POST("/", homePage)
+
+	// Archive Old Pages
+	r.GET("/about", archivedRedirect)
+	r.GET("/data", archivedRedirect)
+	r.GET("/contact", archivedRedirect)
 
 	return r
 }
