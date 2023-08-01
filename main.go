@@ -43,7 +43,7 @@ type formData struct {
 	TargetCountry int   `form:"to_country"`
 }
 
-func FetchCountries() ([]model.Country, error) {
+func fetchCountries() ([]model.Country, error) {
 	if time.Now().Before(cached.Time) && len(cached.countries) != 0 {
 		return cached.countries, nil
 	}
@@ -57,7 +57,7 @@ func FetchCountries() ([]model.Country, error) {
 	return countries, nil
 }
 
-func FetchConversionRate() (string, error) {
+func fetchConversionRate() (string, error) {
 	if time.Now().Before(cached.Time) && cached.conversionRate != "" {
 		return cached.conversionRate, nil
 	}
@@ -73,11 +73,11 @@ func FetchConversionRate() (string, error) {
 
 // Deal with the home page.
 func homePage(c *gin.Context) {
-	countries, err := FetchCountries()
+	countries, err := fetchCountries()
 	if err != nil {
 		log.Println("Failed to read DB: ", err)
 	}
-	conversionRate, err := FetchConversionRate()
+	conversionRate, err := fetchConversionRate()
 	if err != nil {
 		log.Println("Failed to read DB: ", err)
 	}

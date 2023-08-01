@@ -1,5 +1,5 @@
-Calculate how much money is worth in a different country. Uses data from World
-Bank.
+Calculate how much money is worth in a different country. Uses data from [World
+Bank][wb].
 
 Note: Works on python3.4 and above.
 
@@ -16,20 +16,34 @@ Note: Works on python3.4 and above.
         go build
         go build -o pppcli cli/main.go
 
-3. Create the sqlite database by running ppcli.
+4. Create a config.yaml with the following parameters at minimum
 
-        ./ppcli dbInit
+        database: temp.db
+        static: ./static
+        templates: ./templates/*.html
 
-4. Import the CSV into the sqlite database.
+5. Create the sqlite database by running pppcli.
+
+        ./pppcli dbInit
+
+6. Import the CSV into the sqlite database.
 
         ./pppcli import -f data.csv
         ./pppcli importCountries -f countries.csv
 
-5. Run the site.
+7. Insert a key into the SQLite DB by hand to indicate USD to GBP rate for 100 USD.
+
+        sqlite3 temp.db "INSERT OR IGNORE INTO configs (key, value) VALUES ('gbp_rate', 77.75); UPDATE configs SET key='gbp_rate', value=77.75 WHERE key='gbp_rate';" 
+
+8. Run the site.
 
         ./pppconverter
 
 [wb]: http://data.worldbank.org/indicator/PA.NUS.PPP
 
-PS: Some automation code is yet to be outsourced as I'm still working out some
-minor bugs in the code.
+
+### Notes
+* The data.csv file in the repo will not be frequently updated, however, the
+  site itself will fetch new data once a week.
+* Some automation code is yet to be open sourced as I'm still working out some
+  minor bugs in the code.
