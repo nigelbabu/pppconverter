@@ -8,41 +8,28 @@ Note: Works on python3.4 and above.
 
         git clone https://github.com/nigelbabu/pppconverter.git
 
-2. Create a virtual environments and install the dependencies
+2. [Install](https://go.dev/doc/install) Golang for your computer
 
-        python -m venv env
-        source env/bin/activate
-        pip install -r requirements.txt
+3. Build the server and the CLI tools
 
-3. Create the sqlite database by running the website.py file.
+        go mod download
+        go build
+        go build -o pppcli cli/main.go
 
-        flask --app=manage user db_init
+3. Create the sqlite database by running ppcli.
+
+        ./ppcli dbInit
 
 4. Import the CSV into the sqlite database.
 
-				flask --app=manage user importcountries -f countries.csv
-				flask --app=manage user importcsv -f data.csv
+        ./pppcli import -f data.csv
+        ./pppcli importCountries -f countries.csv
 
 5. Run the site.
 
-        flask --app=website --debug run
-
-
-### Updating the data
-1. Download the CSV data from the [world bank portal][wb] and unzip the file.
-
-3. Run the parsecsv.py script to create a file called parsed\_data.csv.
-
-        flask --app=manage user parsecsv -f /path/to/file
-
-4. Replace data.csv file with the newly created parsed\_data.csv file.
-
-5. Import the new CSV into the sqlite database.
-
-				flask --app=manage user importcsv -f data.csv
-
-6. PROFITT!!
-
-
+        ./pppconverter
 
 [wb]: http://data.worldbank.org/indicator/PA.NUS.PPP
+
+PS: Some automation code is yet to be outsourced as I'm still working out some
+minor bugs in the code.
