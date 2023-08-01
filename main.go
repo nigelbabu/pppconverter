@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,10 +18,12 @@ import (
 )
 
 var (
-	db            *gorm.DB
 	cached        cachedData
+	db            *gorm.DB
 	startTime     time.Time
+	validate      bool
 	cacheDuration = 1 * time.Hour
+	ErrorBadData  = errors.New("bad PPP data in the database")
 )
 
 type cachedData struct {
@@ -178,6 +182,21 @@ func setupConfig() error {
 	return nil
 }
 
+func validateData() error {
+	var srcCountry, targetCountry model.Country
+	if err := db.Where("code3 = ?", "GBR").First(&srcCountry).Error; err != nil {
+		return fmt.Errorf("validateData - GBR: %w", err)
+	}
+	if err := db.Where("code3 = ?", "USA").First(&targetCountry).Error; err != nil {
+		return fmt.Errorf("validateData - USA: %w", err)
+	}
+	targetAmt := (float64(100) / srcCountry.PPP) * targetCountry.PPP
+	if targetAmt > 0 {
+		return fmt.Errorf("100 GBP = %.2fUSD: %w", targetAmt, ErrorBadData)
+	}
+	return nil
+}
+
 func main() {
 	var err error
 	if err = setupConfig(); err != nil {
@@ -188,8 +207,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// Fail if the data does not exist to convert from USD to INR
+	if err := validateData(); err != nil && validate {
+		log.Fatal(err)
+	}
 	r := setupRouter()
 	startTime = time.Now()
 	// Listen and Server in 0.0.0.0:8080
 	r.Run(":8080")
+}
+
+func init() {
+	flag.BoolVar(&validate, "validate", false, "If true, crash on startup if the data is invalid")
+	flag.Parse()
 }
