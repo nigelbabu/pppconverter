@@ -191,7 +191,7 @@ func validateData() error {
 		return fmt.Errorf("validateData - USA: %w", err)
 	}
 	targetAmt := (float64(100) / srcCountry.PPP) * targetCountry.PPP
-	if targetAmt > 0 {
+	if targetAmt < 0 {
 		return fmt.Errorf("100 GBP = %.2fUSD: %w", targetAmt, ErrorBadData)
 	}
 	return nil
