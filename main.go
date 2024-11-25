@@ -52,7 +52,7 @@ func fetchCountries() ([]model.Country, error) {
 		return cached.countries, nil
 	}
 	var countries []model.Country
-	results := db.Find(&countries)
+	results := db.Order("name").Find(&countries)
 	if results.Error != nil {
 		return nil, results.Error
 	}
